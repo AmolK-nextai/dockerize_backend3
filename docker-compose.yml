@@ -1,0 +1,21 @@
+version: '3'
+apigateway:
+  apigateway:
+    build: ./apigateway
+    ports:
+      - "3000:3000"
+  potdargroupbackend:
+    build: ./potdargroupbackend
+    ports:
+      - "4000:4000"
+
+  dynamicbackend:
+    build: ./dynamicbackend
+    ports:
+      - "5000:5000"
+
+  randomwebsite:
+    build: ./randomwebsite
+    ports:
+      - "6000:6000"
+
