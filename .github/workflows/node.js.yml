@@ -1,4 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code, and run tests across different versions of Node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
 name: Node.js CI
@@ -11,28 +11,27 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
-strategy:
-  matrix:
-    node-version: [lts/*]  # Use the latest LTS version
-    # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    strategy:
+      matrix:
+        node-version: [lts/*]  # Use the latest LTS version
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
-steps:
-  - uses: actions/checkout@v3
-  - name: Use LTS version of Node.js
-    uses: actions/setup-node@v3
-    with:
-      node-version: ${{ matrix.node-version }}
-      cache: 'npm'
-  - run: npm ci
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use LTS version of Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
     
-  - name: Build and push Docker images
-    env:
+      - name: Build and push Docker images
+        env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
-    run: |
+        run: |
           docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
           docker build -t amolknexaitech/apigateway:latest .
           docker push amolknexaitech/apigateway:latest
@@ -41,25 +40,23 @@ steps:
           docker build -t amolknexaitech/potdargroupbackend:latest .
           docker push amolknexaitech/potdargroupbackend:latest
 
-          
           docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
-          docker build -t amolknexaitech/amolknexaitech/dynamicbackend>:latest .
+          docker build -t amolknexaitech/amolknexaitech/dynamicbackend:latest .
           docker push amolknexaitech/amolknexaitech/dynamicbackend:latest
 
-
           docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
-          docker build -t amolknexaitech/amolknexaitech/amolknexaitech/randomwebsite:latest .
-          docker push amolknexaitech/amolknexaitech/amolknexaitech/randomwebsite:latest
+          docker build -t amolknexaitech/amolknexaitech/randomwebsite:latest .
+          docker push amolknexaitech/amolknexaitech/randomwebsite:latest
 
-  - name: Deploy microservices
-    env:
+      - name: Deploy microservices
+        env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.secrets.CICDNODE }}
-    run: |
+          DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
+        run: |
           # Deploy microservice using Docker Compose or Kubernetes, depending on your setup
           # Example:
           # docker-compose up -d
           # or
           # kubectl apply -f deployment.yaml
-  - name: Run tests
-    run: npm test
+      - name: Run tests
+        run: npm test
