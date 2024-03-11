@@ -5,7 +5,7 @@ const app = express();
 const PORT = 6000
 
 
-app.get("/random",(req,res) =>{
+app.get("/nexaitech",(req,res) =>{
 
     res.send(" yes everything will work  using this way");
 })

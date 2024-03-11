@@ -1,21 +1,26 @@
 version: '3'
-apigateway:
+services:
   apigateway:
-    build: ./apigateway
+    image: amolknexaitech/apigateway:latest
+    # build: ./apigateway
     ports:
       - "3000:3000"
   potdargroupbackend:
-    build: ./potdargroupbackend
+    # build: ./potdargroupbackend
+    image: amolknexaitech/potdargroupbackend:latest
     ports:
       - "4000:4000"
 
   dynamicbackend:
-    build: ./dynamicbackend
+    # build: ./dynamicbackend
+    image: amolknexaitech/dynamicbackend:latest
     ports:
       - "5000:5000"
 
   randomwebsite:
-    build: ./randomwebsite
+    image: amolknexaitech/randomwebsite
     ports:
       - "6000:6000"
+
+# amolknexaitech
 

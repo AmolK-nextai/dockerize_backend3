@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const routes={
     "/potdar":"http://localhost:4000",
     "/dynamic":"http://localhost:5000",
-    "/random": "http://localhost:6000"
+    "/nexaitech": "http://localhost:6000"
 }
 
 for( const route in routes){
