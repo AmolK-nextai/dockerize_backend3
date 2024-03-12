@@ -10,6 +10,8 @@ COPY . .
 
 # Install application dependencies
 RUN npm install
+RUN npm rebuild bcrypt --build-from-source
+
 
 # Expose the port on which the API gateway listens
 EXPOSE 4000
