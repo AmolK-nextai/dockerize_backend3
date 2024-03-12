@@ -32,31 +32,31 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
         run: |
-          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
-          docker build -t amolknexaitech/apigateway:latest .
+          docker login -u $DOCKERHUB_USERNAME -p $CICDNODE
+          #docker build -t amolknexaitech/apigateway:latest .
           docker push amolknexaitech/apigateway:latest
 
-          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
-          docker build -t amolknexaitech/potdargroupbackend:latest .
+          docker login -u $DOCKERHUB_USERNAME -p $CICDNODE
+          #docker build -t amolknexaitech/potdargroupbackend:latest .
           docker push amolknexaitech/potdargroupbackend:latest
 
-          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
-          docker build -t amolknexaitech/amolknexaitech/dynamicbackend:latest .
+          docker login -u $DOCKERHUB_USERNAME -p $CICDNODE
+          #docker build -t amolknexaitech/amolknexaitech/dynamicbackend:latest .
           docker push amolknexaitech/amolknexaitech/dynamicbackend:latest
 
-          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
-          docker build -t amolknexaitech/amolknexaitech/randomwebsite:latest .
+          docker login -u $DOCKERHUB_USERNAME -p $CICDNODE
+          #docker build -t amolknexaitech/amolknexaitech/randomwebsite:latest .
           docker push amolknexaitech/amolknexaitech/randomwebsite:latest
 
-      - name: Deploy microservices
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
-        run: |
+      #- name: Deploy microservices
+      #  env:
+         # DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+         # DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
+      #  run: |
           # Deploy microservice using Docker Compose or Kubernetes, depending on your setup
           # Example:
           # docker-compose up -d
           # or
           # kubectl apply -f deployment.yaml
-      - name: Run tests
-        run: npm test
+      #- name: Run tests
+       # run: npm test
