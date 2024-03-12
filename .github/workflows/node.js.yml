@@ -1,13 +1,10 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code, and run tests across different versions of Node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
   pull_request:
-    branches: [ "main" ]
+    branches: [main]
 
 jobs:
   build:
@@ -15,48 +12,50 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [lts/*]  # Use the latest LTS version
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [lts/*]
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Use LTS version of Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm ci
-    
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build and push Docker images
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
         run: |
           docker login -u $DOCKERHUB_USERNAME -p $CICDNODE
-          #docker build -t amolknexaitech/apigateway:latest .
-          docker push amolknexaitech/apigateway:latest
-
+          docker build -t amolknexaitech/apigateway:${{ github.sha }} .
+          docker push amolknexaitech/apigateway:${{ github.sha }}
+          # Repeat the above steps for other images
           docker login -u $DOCKERHUB_USERNAME -p $CICDNODE
-          #docker build -t amolknexaitech/potdargroupbackend:latest .
-          docker push amolknexaitech/potdargroupbackend:latest
-
+          docker build -t amolknexaitech/potdargroupbackend:${{ github.sha }} .
+          docker push amolknexaitech/potdargroupbackend:${{ github.sha }}
           docker login -u $DOCKERHUB_USERNAME -p $CICDNODE
-          #docker build -t amolknexaitech/amolknexaitech/dynamicbackend:latest .
-          docker push amolknexaitech/amolknexaitech/dynamicbackend:latest
-
+          docker build -t amolknexaitech/amolknexaitech/dynamicbackend:${{ github.sha }} .
+          docker push amolknexaitech/amolknexaitech/dynamicbackend:${{ github.sha }}
           docker login -u $DOCKERHUB_USERNAME -p $CICDNODE
-          #docker build -t amolknexaitech/amolknexaitech/randomwebsite:latest .
-          docker push amolknexaitech/amolknexaitech/randomwebsite:latest
+          docker build -t amolknexaitech/amolknexaitech/randomwebsite:${{ github.sha }} .
+          docker push amolknexaitech/amolknexaitech/randomwebsite:${{ github.sha }}
 
-      #- name: Deploy microservices
-      #  env:
-         # DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-         # DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
-      #  run: |
+      - name: Deploy microservices
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
+        run: |
           # Deploy microservice using Docker Compose or Kubernetes, depending on your setup
           # Example:
           # docker-compose up -d
           # or
           # kubectl apply -f deployment.yaml
-      #- name: Run tests
-       # run: npm test
+
+      - name: Run tests
+        run: npm test
