@@ -1,0 +1,58 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code, and run tests across different versions of Node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+  
+    steps:
+- uses: actions/checkout@v4
+- name: Use Node.js
+  uses: actions/setup-node@v4
+  with:
+    node-version: '20.x'
+- name: Install dependencies
+  run: npm install
+    
+      - name: Build and push Docker images
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
+        run: |
+          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
+          docker build -t amolknexaitech/apigateway:latest .
+          docker push amolknexaitech/apigateway:latest
+
+          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
+          docker build -t amolknexaitech/potdargroupbackend:latest .
+          docker push amolknexaitech/potdargroupbackend:latest
+
+          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
+          docker build -t amolknexaitech/amolknexaitech/dynamicbackend:latest .
+          docker push amolknexaitech/amolknexaitech/dynamicbackend:latest
+
+          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
+          docker build -t amolknexaitech/amolknexaitech/randomwebsite:latest .
+          docker push amolknexaitech/amolknexaitech/randomwebsite:latest
+
+      - name: Deploy microservices
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
+        run: |
+          # Deploy microservice using Docker Compose or Kubernetes, depending on your setup
+          # Example:
+          # docker-compose up -d
+          # or
+          # kubectl apply -f deployment.yaml
+      # - name: Run tests
+        # run: npm test

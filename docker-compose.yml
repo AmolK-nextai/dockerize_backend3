@@ -7,18 +7,18 @@ services:
       - "3000:3000"
   potdargroupbackend:
     # build: ./potdargroupbackend
-    image: amolknexaitech/potdargroupbackend:latest
+    image: potdargroupbackend:latest
     ports:
       - "4000:4000"
 
   dynamicbackend:
     # build: ./dynamicbackend
-    image: amolknexaitech/dynamicbackend:latest
+    image: dynamicbackend:latest
     ports:
       - "5000:5000"
 
   randomwebsite:
-    image: amolknexaitech/randomwebsite
+    image: randomwebsite
     ports:
       - "6000:6000"
 
