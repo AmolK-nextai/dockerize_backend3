@@ -27,17 +27,17 @@ jobs:
           DOCKERHUB_TOKEN: ${{ secrets.CICDNODE }}
         run: |
           docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
-          docker build -t amolknexaitech/apigateway:latest      C:\Users\Admin\Documents\project\dockerizebackend3\apigateway
+          docker build -t apigateway:latest      ./apigateway
           docker push amolknexaitech/apigateway:latest
 
-          docker build -t amolknexaitech/potdargroupbackend:latest  C:\Users\Admin\Documents\project\dockerizebackend3\PotdarGroup_admin_panel
+          docker build -t potdargroupbackend:latest  ./PotdarGroup_admin_panel
           docker push amolknexaitech/potdargroupbackend:latest
 
-          docker build -t amolknexaitech/amolknexaitech/dynamicbackend:latest C:\Users\Admin\Documents\project\dockerizebackend3\dynamicbackend
-          docker push amolknexaitech/amolknexaitech/dynamicbackend:latest
+          docker build -t dynamicbackend:latest ./dynamicbackend
+          docker push amolknexaitech/dynamicbackend:latest
 
           docker build -t amolknexaitech/amolknexaitech/randomwebsite:latest .
-          docker push amolknexaitech/amolknexaitech/randomwebsite:latest  C:\Users\Admin\Documents\project\dockerizebackend3\randomwebsite
+          docker push amolknexaitech/randomwebsite:latest  ./randomwebsite
 
       - name: Deploy microservices
         env:
